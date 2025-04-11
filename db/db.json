@@ -1,0 +1,6 @@
+{
+  "todos": [
+    { "id": 1, "text": "공부하기", "completed": false },
+    { "id": 2, "text": "운동하기", "completed": true }
+  ]
+}
