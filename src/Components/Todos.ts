@@ -34,7 +34,8 @@ export default function Todos(todos: Todo[]) {
         input.type = 'checkbox';
         input.checked = todo.completed;
 
-        $todo.addEventListener('click', handleChange);
+        input.addEventListener('click', handleChange);
+        $todo.addEventListener('click', clickChangeText);
         const label = document.createElement('label');
         label.className =
           'ms-2 text-sm font-medium text-gray-900 w-full cursor-pointer';
@@ -58,18 +59,64 @@ export default function Todos(todos: Todo[]) {
     }
   };
 
+  const clickChangeText = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const target = e.target as HTMLElement;
+    if (target.tagName !== 'LABEL') return;
+
+    const parent = target.parentElement!;
+    const id = parent.dataset.id!;
+    const $input = document.createElement('input');
+    $input.type = 'text';
+    $input.value = target.textContent!;
+    $input.className =
+      'w-4 ms-2 my-2 h-4 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 w-full flex items-center hover:ring-1 hover:ring-gray-300 cursor-pointer p-2 rounded-md hover:shadow-md';
+
+    const saveEdit = async () => {
+      const newText = $input.value.trim();
+      const todo = state.todos.find((t) => t.id === id);
+      if (!todo || !newText) return;
+
+      state.todos = state.todos.map((t) =>
+        t.id === id ? { ...t, text: newText } : t
+      );
+      await handleUpdate(id, newText, todo.completed);
+      render();
+    };
+
+    $input.addEventListener('keydown', async (e) => {
+      if ((e as KeyboardEvent).key === 'Enter') {
+        await saveEdit();
+      }
+    });
+
+    $input.addEventListener('blur', async () => {
+      await saveEdit();
+    });
+
+    parent.replaceChild($input, target);
+    $input.focus();
+  };
+
   const handleChange = async (e: Event) => {
     e.preventDefault();
+    e.stopPropagation();
     const input = e.target as HTMLInputElement;
     const id = input.parentElement!.dataset.id!;
 
-    // text 가져오기
     const text = input.parentElement!.querySelector('label')!.textContent!;
-    state.todos = state.todos.map((t) =>
-      (t.id as unknown as string) === id ? { ...t, completed: !t.completed } : t
-    );
+    let completed = false;
+    state.todos = state.todos.map((t) => {
+      if (t.id === id) {
+        completed = !t.completed;
+        return { ...t, completed };
+      }
+      return t;
+    });
 
-    await handleUpdate(id, text, input.checked);
+    await handleUpdate(id, text, completed);
     render();
   };
 
@@ -85,8 +132,18 @@ export default function Todos(todos: Todo[]) {
     e.preventDefault();
 
     const id = (e.target as HTMLButtonElement).dataset.id;
+    const completed = state.todos.find((t) => t.id === id)?.completed;
 
-    state.todos = state.todos.filter((t) => (t.id as unknown as string) !== id);
+    if (!completed) {
+      const confirm = window.confirm(
+        '아직 완료하지 않은 TODO 입니다. \n삭제하시겠습니까?'
+      );
+      if (!confirm) {
+        return;
+      }
+    }
+
+    state.todos = state.todos.filter((t) => t.id !== id);
     await deleteTodo(id!);
     render();
   };

@@ -20,9 +20,9 @@ export default function App($app: HTMLElement) {
     $app.innerHTML = `
     <div class="container mx-auto">
       <div class="mx-auto flex flex-col items-center justify-center h-screen">
-        <div class="flex flex-col items-center justify-center h-screen">
+        <div class="flex flex-col items-center justify-center h-screen w-[400px]">
           <h1 class="text-2xl font-bold">My Todo List</h1>
-          <div id="add-todo" class=""></div>
+          <div id="add-todo"></div>
           <ul id="todos" class="w-full flex flex-col items-center justify-center ring-1 ring-gray-300 rounded-md p-4"></ul>
         </div>
       </div>

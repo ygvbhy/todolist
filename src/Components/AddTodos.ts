@@ -8,9 +8,9 @@ export default function AddTodos(handleGetTodos: () => Promise<void>) {
       throw new Error('AddTodo element not found');
     }
 
-    $target.className = `flex flex-col items-center justify-center`;
+    $target.className = `flex flex-col items-center justify-center w-full`;
     const $addTodo = document.createElement('div');
-    $addTodo.className = `flex flex-row items-center justify-center`;
+    $addTodo.className = `flex flex-row items-center justify-center w-full`;
     const inputDiv = document.createElement('div');
     inputDiv.className = `my-4`;
 
@@ -24,6 +24,12 @@ export default function AddTodos(handleGetTodos: () => Promise<void>) {
     const $input = document.createElement('input');
     $input.className = `bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`;
     $input.placeholder = '코딩 공부';
+    $input.addEventListener('keydown', (e) => {
+      if (e.isComposing) return;
+      if (e.key === 'Enter') {
+        addTodo(e);
+      }
+    });
     inputDiv.appendChild($input);
     $addTodo.appendChild(inputDiv);
     $addTodo.appendChild(button);
