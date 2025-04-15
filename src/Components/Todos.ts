@@ -18,7 +18,7 @@ export default function Todos(todos: Todo[]) {
     }
 
     $todos.innerHTML = '';
-    if (state.todos.length === 0) {
+    if (!state.todos || state.todos.length === 0) {
       const $todo = document.createElement('li');
       $todo.textContent = '등록된 할일이 없습니다.';
       $todos.appendChild($todo);

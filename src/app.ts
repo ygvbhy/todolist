@@ -1,7 +1,7 @@
 import { Todo } from './types';
 import { getTodos } from './api';
-import Todos from './Components/Todos';
-import AddTodos from './Components/AddTodos';
+import Todos from './components/Todos';
+import AddTodos from './components/AddTodos';
 
 export default function App($app: HTMLElement) {
   const state: { todos: Todo[] } = {

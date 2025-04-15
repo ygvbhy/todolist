@@ -22,6 +22,7 @@ const request = async (
     return data;
   } catch (error) {
     console.error(error);
+    alert('Failed To Fetch Todos');
   }
 };
 
@@ -31,6 +32,7 @@ const getTodos = async () => {
     return data;
   } catch (error) {
     console.error(error);
+    alert('Failed To Fetch Todos');
   }
 };
 
@@ -40,6 +42,7 @@ const createTodo = async (text: string) => {
     return res;
   } catch (error) {
     console.error(error);
+    alert('Failed To Create Todo');
   }
 };
 
@@ -49,6 +52,7 @@ const deleteTodo = async (id: string) => {
     return res;
   } catch (error) {
     console.error(error);
+    alert('Failed To Delete Todo');
   }
 };
 
@@ -58,6 +62,7 @@ const updateTodo = async (id: string, text: string, completed: boolean) => {
     return res;
   } catch (error) {
     console.error(error);
+    alert('Failed To Update Todo');
   }
 };
 
